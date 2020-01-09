@@ -19,11 +19,15 @@ then
         echo "$(date) - waiting for ${DB_HOST}..."
         sleep 3
     done
-    echo "Start processing thread ${THREAD_NO} from ${THREAD_COUNT} ..."
-    while true; do
-        ${CONSOLE} "$@" ${DEBUG_PARAMS}
-        sleep 10
-    done
+
+    (
+        flock -w 600 200 || exit 1
+
+        while true; do
+            ${CONSOLE} "$@" ${DEBUG_PARAMS}
+            sleep 10
+        done
+    ) 200>/code/var/log/init.lock
 else
     echo "Nothing interesting here ..."
     while true; do

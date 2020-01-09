@@ -55,7 +55,7 @@ sudo chmod -R 0777 /code/var/
 
     sudo chown -R www-data:www-data /code/var
     sudo chmod -R 0777 /code/var
-) 200>/code/var/log/init-composer.lock
+) 200>/code/var/log/init.lock
 
 if [[ ${APP_ENV} != prod && ${SKIP_DEV_SLEEP} == "0" ]]; then
     echo "dev sleep..."
