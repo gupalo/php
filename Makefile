@@ -1,4 +1,4 @@
-NAME = gupalo/nginx
+NAME = gupalo/php
 
 .PHONY: all build release
 

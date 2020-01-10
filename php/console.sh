@@ -1,36 +1,10 @@
 #!/usr/bin/env bash
 
-DEBUG_PARAMS=""
-[[ -z ${DEBUG} ]] && DEBUG=0
-[[ -z ${THREAD_NO} ]] && THREAD_NO=1
-[[ -z ${THREAD_COUNT} ]] && THREAD_COUNT=1
-[[ -z ${APP_ENV} ]] && APP_ENV="prod"
-[[ -z ${DB_HOST} ]] && DB_HOST="db"
-[[ -z ${CONSOLE} ]] && CONSOLE="/code/bin/console"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-[[ ${DEBUG} == 1 ]] && DEBUG_PARAMS="-v"
-[[ ${DEBUG} == 2 ]] && DEBUG_PARAMS="-vv"
-[[ ${DEBUG} == 3 ]] && DEBUG_PARAMS="-vvv"
+. ${DIR}/init.sh
 
-if [[ ${APP_ENV} == prod ]];
-then
-    # wait for DB
-    until nc -z ${DB_HOST} 3306; do
-        echo "$(date) - waiting for ${DB_HOST}..."
-        sleep 3
-    done
-
-    (
-        flock -w 600 200 || exit 1
-
-        while true; do
-            ${CONSOLE} "$@" ${DEBUG_PARAMS}
-            sleep 10
-        done
-    ) 200>/code/var/log/init.lock
-else
-    echo "Nothing interesting here ..."
-    while true; do
-        sleep 3600
-    done
-fi
+while true; do
+    ${CONSOLE} "$@" ${DEBUG_PARAMS}
+    sleep ${SLEEP}
+done

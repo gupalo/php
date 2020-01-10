@@ -20,9 +20,8 @@ Dockerfile
 
     COPY . ./
     
-    RUN mkdir -p /code/var; rm -rf /code/var/*; \
-        /usr/local/bin/composer install -n --prefer-dist --no-dev -o -d /code; \
-        chown -R www-data:www-data /code/var;
+    RUN sudo mkdir -p /code/var; sudo rm -rf /code/var/*; \
+        /usr/local/bin/composer install -n --prefer-dist --no-dev -o -d /code;
 
 
 docker-compose.yaml:
@@ -39,4 +38,4 @@ docker-compose.yaml:
         env_file: ['./env.conf']
         restart: 'always'
         networks: ['default']
-        entrypoint: '/code/bin/daemon.sh'
+        entrypoint: '/opt/php/console.sh app:command --param1=value1 --param2=value2'
