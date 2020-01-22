@@ -28,6 +28,14 @@ RUN echo "realpath_cache_size=4096k" >> /usr/local/etc/php/conf.d/zzz.ini; \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir "/usr/local/bin" --filename composer; \
     usermod -u 2000 www-data; adduser www-data sudo; echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers;
 
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends gnupg ; \
+    wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - ; \
+    echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends blackfire-agent blackfire-php; \
+    apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
+
 WORKDIR /code/
 VOLUME /code
 
