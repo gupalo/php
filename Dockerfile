@@ -6,7 +6,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN apt-get update; \
     apt-get install -y --no-install-recommends \
         sudo wget netcat libcurl4-openssl-dev curl git unzip libzip-dev zlib1g-dev libpng-dev apt-utils \
-        iputils-ping; \
+        iputils-ping golang; \
     apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
 
 RUN docker-php-ext-install pdo pdo_mysql curl opcache zip gd
@@ -35,13 +35,6 @@ RUN apt-get update; \
     apt-get update; \
     apt-get install -y --no-install-recommends blackfire-agent blackfire-php; \
     apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
-
-RUN wget https://get.symfony.com/cli/installer -O - | bash; \
-    mv /root/.symfony/bin/symfony /usr/local/bin/symfony; \
-    rm -rf /root/.symfony/; \
-    addgroup --force-badname _www; \
-    adduser --no-create-home --force-badname --disabled-login --disabled-password --system _www; \
-    addgroup _www _www
 
 WORKDIR /code/
 VOLUME /code
