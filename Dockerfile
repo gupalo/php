@@ -36,6 +36,10 @@ RUN apt-get update; \
     apt-get install -y --no-install-recommends blackfire-agent blackfire-php; \
     apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
 
+RUN wget https://get.symfony.com/cli/installer -O - | bash; \
+    mv /root/.symfony/bin/symfony /usr/local/bin/symfony; \
+    rm -rf /root/.symfony/
+
 WORKDIR /code/
 VOLUME /code
 
