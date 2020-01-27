@@ -74,7 +74,7 @@ fi
 echo "Waiting for lock..."
 sudo mkdir -p /code/var/log
 sudo chown www-data:www-data /code/var/log/ /code/var/log/* 2>/dev/null
-sudo chmod 0755 /code/var/log /code/var/log/* 2>/dev/null
+sudo chmod 0777 /code/var/log /code/var/log/* 2>/dev/null
 (
     flock -w 600 200 || exit 1
 ) 200>/code/var/log/init.lock
