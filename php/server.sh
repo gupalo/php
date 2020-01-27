@@ -8,4 +8,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 . ${DIR}/init.sh
 . ${DIR}/main.sh
 
+sudo mkdir -p /var/www/.symfony/ && sudo chown -R www-data:www-data /var/www/.symfony/
+
 /usr/local/bin/symfony server:start --allow-http --no-tls --dir=${CODE_DIR} --port=80
