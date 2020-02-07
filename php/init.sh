@@ -39,6 +39,8 @@ if [[ "${DB_HOST}" != "" ]]; then
     done
 fi
 
+sudo chmod 0777 ${CONSOLE}
+
 if [[ "${BLACKFIRE_ENABLED}" = "1" ]]; then
     sudo apt-get install -y blackfire-php
     sudo chown -R www-data:www-data /var/www
