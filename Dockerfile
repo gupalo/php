@@ -4,12 +4,12 @@ ENV DEBIAN_FRONTEND="noninteractive"
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update; \
+    apt-get install -y --no-install-recommends sudo wget netcat curl git unzip apt-utils iputils-ping golang graphviz; \
     apt-get install -y --no-install-recommends \
-        sudo wget netcat libcurl4-openssl-dev curl git unzip libzip-dev zlib1g-dev libpng-dev apt-utils \
-        iputils-ping golang; \
-    apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
-
-RUN docker-php-ext-install pdo pdo_mysql curl opcache zip gd
+        libfreetype6-dev libjpeg62-turbo-dev libcurl4-openssl-dev libzip-dev zlib1g-dev libpng-dev libicu-dev \
+        libxml2-dev libonig-dev g++; \
+    docker-php-ext-install curl dom gd intl json mbstring opcache pcntl pdo pdo_mysql simplexml sockets spl xml zip; \
+    docker-php-source delete; apt-get clean; rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*;
 
 RUN echo "realpath_cache_size=4096k" >> /usr/local/etc/php/conf.d/zzz.ini; \
     echo "realpath_cache_ttl=7200" >> /usr/local/etc/php/conf.d/zzz.ini; \
