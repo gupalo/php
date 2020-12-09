@@ -16,9 +16,6 @@
 [[ -z ${SLEEP} ]] && SLEEP="0"
 [[ -z ${DCN_HOST} ]] && DCN_HOST="dcn"
 [[ -z ${DCN_PORT} ]] && DCN_PORT="80"
-[[ -z ${BLACKFIRE_ENABLED} ]] && BLACKFIRE_ENABLED="0"
-[[ -z ${BLACKFIRE_SERVER_ID} ]] && BLACKFIRE_SERVER_ID=""
-[[ -z ${BLACKFIRE_SERVER_TOKEN} ]] && BLACKFIRE_SERVER_TOKEN=""
 
 if [[ "${THREAD_NO}" == "auto" ]]; then
     until nc -z ${DCN_HOST} ${DCN_PORT}; do
@@ -40,30 +37,6 @@ if [[ "${DB_HOST}" != "" ]]; then
 fi
 
 sudo chmod 0777 ${CONSOLE}
-
-if [[ "${BLACKFIRE_ENABLED}" = "1" ]]; then
-    sudo apt-get install -y blackfire-php
-    sudo chown -R www-data:www-data /var/www
-    cat /opt/php/blackfire/client.ini \
-        | sed "s%{BLACKFIRE_CLIENT_ID}%${BLACKFIRE_CLIENT_ID}%g" \
-        | sed "s%{BLACKFIRE_CLIENT_TOKEN}%${BLACKFIRE_CLIENT_TOKEN}%g" \
-        > /var/www/.blackfire.ini
-    sudo chmod 0666 /etc/blackfire/agent
-    sudo cat /opt/php/blackfire/agent.ini \
-        | sed "s%{BLACKFIRE_SERVER_ID}%${BLACKFIRE_SERVER_ID}%g" \
-        | sed "s%{BLACKFIRE_SERVER_TOKEN}%${BLACKFIRE_SERVER_TOKEN}%g" \
-        > /etc/blackfire/agent
-    sudo chmod 0666 /usr/local/etc/php/conf.d/zz-blackfire.ini
-    sudo cat /opt/php/blackfire/blackfire.ini \
-        | sed "s%{BLACKFIRE_SERVER_ID}%${BLACKFIRE_SERVER_ID}%g" \
-        | sed "s%{BLACKFIRE_SERVER_TOKEN}%${BLACKFIRE_SERVER_TOKEN}%g" \
-        > /usr/local/etc/php/conf.d/zz-blackfire.ini
-    sudo /etc/init.d/blackfire-agent restart
-else
-    sudo rm -f /usr/local/etc/php/conf.d/zz-blackfire.ini > /dev/null 2>&1
-    sudo /etc/init.d/blackfire-agent stop > /dev/null 2>&1
-    sudo apt-get remove -qy blackfire-php > /dev/null 2>&1
-fi
 
 if [[ ${APP_ENV} != "prod" && ${SKIP_DEV_SLEEP} == "0" ]]; then
     echo "Dev sleep..."
