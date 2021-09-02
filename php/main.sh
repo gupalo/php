@@ -28,7 +28,7 @@ echo "Waiting for lock (main)..."
     if [ -d /code/src/Migrations ] || [ -d /code/migrations ] ; then
         (
             ${CONSOLE} doctrine:database:create --if-not-exists
-            ${CONSOLE} doctrine:migrations:sync-metadata-storage
+            #${CONSOLE} doctrine:migrations:sync-metadata-storage
             ${CONSOLE} doctrine:migrations:migrate -n
         )
     fi
